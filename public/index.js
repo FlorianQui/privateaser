@@ -170,6 +170,9 @@ function updatePrice(){
     var insurance = commission / 2;
     var treasury = event.persons;
     var rest = commission - insurance - treasury;
+
+    //Deductible
+    event.deductibleReduction ? price += event.persons : price;
     
     //Update
     event.price = price;
@@ -180,7 +183,22 @@ function updatePrice(){
   }
 }
 
-updatePrice()
+function payActors(){
+  for (var actor of actors){
+    var event = events.find(function(x){
+      return x.id === actor.eventId;
+    });
+
+    actor.payment.find((x) => {return x.who === "booker"}).amount = event.price;
+    actor.payment.find((x) => {return x.who === "bar"}).amount = event.price * 0.7;
+    actor.payment.find((x) => {return x.who === "insurance"}).amount = event.commission.insurance;
+    actor.payment.find((x) => {return x.who === "treasury"}).amount = event.commission.treasury;
+    actor.payment.find((x) => {return x.who === "privateaser"}).amount = event.commission.privateaser;
+  }
+}
+
+updatePrice();
+payActors();
 
 console.log(bars);
 console.log(events);
