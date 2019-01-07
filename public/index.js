@@ -161,6 +161,10 @@ function updatePrice(){
 
     price = event.time * bar.pricePerHour + event.persons * bar.pricePerPerson;
 
+    console.log(event.persons > 60);
+
+    event.persons > 60 ? price *= 0.5 : event.persons > 20 ? price *= 0.7 : event.persons > 10 ? price *= 0.9 : price;
+
     event.price = price;
   }
 }
