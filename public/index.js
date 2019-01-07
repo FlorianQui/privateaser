@@ -159,13 +159,24 @@ function updatePrice(){
       return x.id === barid;
     })
 
+    //Compute price
     price = event.time * bar.pricePerHour + event.persons * bar.pricePerPerson;
 
-    console.log(event.persons > 60);
-
+    //Discount
     event.persons > 60 ? price *= 0.5 : event.persons > 20 ? price *= 0.7 : event.persons > 10 ? price *= 0.9 : price;
 
+    //Commission
+    var commission = price * 0.3;
+    var insurance = commission / 2;
+    var treasury = event.persons;
+    var rest = commission - insurance - treasury;
+    
+    //Update
     event.price = price;
+
+    event.commission.insurance = insurance;
+    event.commission.treasury = treasury;
+    event.commission.privateaser = rest;
   }
 }
 
