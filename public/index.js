@@ -1,9 +1,13 @@
 'use strict';
 
+var bars;
+var events;
+var actors;
+
 //list of bats
 //useful for ALL 5 steps
 //could be an array of objects that you fetched from api or database
-const bars = [{
+bars = [{
   'id': 'f944a3ff-591b-4d5b-9b67-c7e08cba9791',
   'name': 'freemousse-bar',
   'pricePerHour': 50,
@@ -26,7 +30,7 @@ const bars = [{
 //The `price` is updated from step 1 and 2
 //The `commission` is updated from step 3
 //The `options` is useful from step 4
-const events = [{
+events = [{
   'id': 'bba9500c-fd9e-453f-abf1-4cd8f52af377',
   'booker': 'esilv-bde',
   'barId': 'f944a3ff-591b-4d5b-9b67-c7e08cba9791',
@@ -60,7 +64,7 @@ const events = [{
   'id': '94dab739-bd93-44c0-9be1-52dd07baa9f6',
   'booker': 'otacos',
   'barId': '6e06c9c0-4ab0-4d66-8325-c5fa60187cf8',
-  'distance': 5,
+  'time': 5,
   'persons': 80,
   'options': {
     'deductibleReduction': true
@@ -75,7 +79,7 @@ const events = [{
 
 //list of actors for payment
 //useful from step 5
-const actors = [{
+actors = [{
   'eventId': 'bba9500c-fd9e-453f-abf1-4cd8f52af377',
   'payment': [{
     'who': 'booker',
@@ -145,6 +149,23 @@ const actors = [{
     'amount': 0
   }]
 }];
+
+function updatePrice(){
+  for (var event of events){
+    var price = 0;
+
+    var barid = event.barId;
+    var bar = bars.find(function(x) {
+      return x.id === barid;
+    })
+
+    price = event.time * bar.pricePerHour + event.persons * bar.pricePerPerson;
+
+    event.price = price;
+  }
+}
+
+updatePrice()
 
 console.log(bars);
 console.log(events);
